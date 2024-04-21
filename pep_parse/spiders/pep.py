@@ -14,7 +14,8 @@ class PepSpider(scrapy.Spider):
 
     def parse(self, response):
         """Собирает ссылки на документы PEP из общей таблицы."""
-        all_peps_links = response.css("a.pep::attr('href')").getall()
+        num_index = response.xpath("//*[@id='numerical-index']").css("tbody")
+        all_peps_links = num_index.css("a::attr(href)").getall()
         for link in all_peps_links:
             yield response.follow(link, callback=self.parse_pep)
 
